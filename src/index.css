@@ -1,0 +1,19 @@
+.webPage {
+  display: flex; /* or inline-flex */
+  flex-flow: column;
+  align-items: center;
+  align-content: stretch;
+
+}
+
+.details {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+.freeText {
+  display: flex;
+  flex-flow: column;
+  align-self: stretch;
+}
