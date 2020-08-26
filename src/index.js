@@ -48,6 +48,8 @@ class ClientInputForm extends React.Component {
   toJson() {
   }
 
+  myNEWfunc(){}
+
   render() {
     const thisYear = Number(new Date().toLocaleDateString().slice(6,11));
     const numList = []
