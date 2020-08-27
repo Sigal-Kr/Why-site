@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import logo from './mylogo.png';
+import bag from './Watercolor-Background-Image.jpg'
 
 class ClientInputForm extends React.Component {
   constructor(props) {
@@ -13,31 +14,51 @@ class ClientInputForm extends React.Component {
       clientYearOfBirth: '',
       clientComplaint: '',
       companyName: '',
+      complaintContent: '',
     } ;
-    this.handleInputChange=this.handleInputChange.bind(this);
-    this.handleSubmit= this.handleSubmit.bind(this);
+//    this.handleInputChange=this.handleInputChange.bind(this);
+//    this.handleSubmit= this.handleSubmit.bind(this);
   }
 
-  validateName(){
-
+  validateName(name){
+    return true;
   } // check that there only letters inside the name, no funny figures
 
-  validatePhone(){
+  validatePhone(phone){
+    return true;
   } // check that the phone has a certain amount of digits, no funny figures or letters
 
-  validateEmail(){
+  validateEmail(email){
+    return true;
   } //check that the email has both user and domain.
 
-  validateContent(){
-  } //check that there is content inside the complaint submitted
-
-  validateCompanyName(){
+  validateCompanyName(company){
+    return true;
   }
 
+  validateContent(complaintContent){
+    return true;
+  } //check that there is content inside the complaint submitted
+
   validateForm(){
+    if (this.validateName(this.state.clientName) &&
+      this.validatePhone(this.state.clientPhone) &&
+      this.validateEmail(this.state.clientEmail) &&
+      this.validateCompanyName(this.state.companyName) &&
+      this.validateContent(this.state.content)) {
+        return true;
+    }
+    else {
+      return false;
+    }
+
   }
 
   handleSubmit(){
+    if (this.validateForm()){
+      const jsonComplaint = this.toJson(this.state);
+      return jsonComplaint;
+    }
   }
 
   handleInputChange(event) {
@@ -46,9 +67,8 @@ class ClientInputForm extends React.Component {
   }
 
   toJson() {
+    return true;
   }
-
-  myNEWfunc(){}
 
   render() {
     const thisYear = Number(new Date().toLocaleDateString().slice(6,11));
@@ -59,7 +79,8 @@ class ClientInputForm extends React.Component {
     const yearList = numList.map((number,index)=>
       <option key={index.toString()}> {number} </option> );
     yearList.splice(0,0,<option key='pick'> Pick your birth year </option>);
-    return (
+
+    return(
       <div className= "webPage">
         <label>
           <img src={logo} alt="Logo" />
@@ -133,13 +154,19 @@ class App extends React.Component {
   }
 
   render() {
+    var bg= require('./Watercolor-Background-Image.jpg')
     return(
-      <>
-        <head>WHY! website</head>
+      <html>
+        <head
+          style = {{backgroundImage: "url("+ bg +")",
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'}}>
+        </head>
         <body>
           <ClientInputForm/>
         </body>
-      </>
+      </html>
     )
   }
 }
