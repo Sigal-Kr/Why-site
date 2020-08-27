@@ -1,8 +1,19 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import logo from './mylogo.png';
-import bag from './Watercolor-Background-Image.jpg'
+
+function generateYearList() {
+  const thisYear = Number(new Date().toLocaleDateString().slice(6,11));
+  const numList = []
+  for (let i = thisYear; i>thisYear - 120 ; i--){
+    numList.push(i);
+  }
+  const yearList = numList.map((number,index)=>
+    <option key={index.toString()}> {number} </option> );
+  yearList.splice(0,0,<option key='pick'> Pick your birth year </option>);
+  return yearList;
+}
 
 class ClientInputForm extends React.Component {
   constructor(props) {
@@ -16,8 +27,8 @@ class ClientInputForm extends React.Component {
       companyName: '',
       complaintContent: '',
     } ;
-//    this.handleInputChange=this.handleInputChange.bind(this);
-//    this.handleSubmit= this.handleSubmit.bind(this);
+    this.handleInputChange=this.handleInputChange.bind(this);
+    this.handleSubmit= this.handleSubmit.bind(this);
   }
 
   validateName(name){
@@ -48,16 +59,13 @@ class ClientInputForm extends React.Component {
       this.validateContent(this.state.content)) {
         return true;
     }
-    else {
-      return false;
-    }
-
+    return false;
   }
 
   handleSubmit(){
     if (this.validateForm()){
       const jsonComplaint = this.toJson(this.state);
-      return jsonComplaint;
+      return jsonComplaint; //to be continued..
     }
   }
 
@@ -67,24 +75,15 @@ class ClientInputForm extends React.Component {
   }
 
   toJson() {
-    return true;
+    return true; //to be continued...
   }
 
   render() {
-    const thisYear = Number(new Date().toLocaleDateString().slice(6,11));
-    const numList = []
-    for (let i = thisYear; i>thisYear - 120 ; i--){
-        numList.push(i);
-    }
-    const yearList = numList.map((number,index)=>
-      <option key={index.toString()}> {number} </option> );
-    yearList.splice(0,0,<option key='pick'> Pick your birth year </option>);
-
     return(
       <div className= "webPage">
         <label>
           <img src={logo} alt="Logo" />
-          <h1 className="details" > We Hear You, Bro. </h1>
+          <h1 > We Hear You, Bro. </h1>
         </label>
         <form className= "details">
           <input
@@ -112,11 +111,10 @@ class ClientInputForm extends React.Component {
           />
           <select
               Name="clientYearOfBirth">
-              {yearList}
+              {generateYearList()}
           </select>
         </form>
-          <div className="freeText">
-            <textArea
+            <textarea
               name= "companyName"
               required
               type="text"
@@ -125,19 +123,18 @@ class ClientInputForm extends React.Component {
               onChange = {this.handleInputChange}
             />
 
-            <textArea
+            <textarea
+              id="complaint"
               name= "clientComplaint"
               type="text"
               placeholder = {'Type your complaint in free text here'}
               onChange = {this.handleInputChange}
             />
-          </div>
         <input type="submit" value="Submit complaint"/>
       </div>
     )
   }
 }
-
 
 
 class App extends React.Component {
@@ -157,11 +154,8 @@ class App extends React.Component {
     var bg= require('./Watercolor-Background-Image.jpg')
     return(
       <html>
-        <head
-          style = {{backgroundImage: "url("+ bg +")",
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'}}>
+        <head>
+          <title>Why Website</title>
         </head>
         <body>
           <ClientInputForm/>
