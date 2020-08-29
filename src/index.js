@@ -4,7 +4,7 @@ import './index.css';
 import logo from './mylogo.png';
 
 function generateYearList() {
-  const thisYear = Number(new Date().toLocaleDateString().slice(6,11));
+  const thisYear = (new Date().getFullYear());
   const numList = []
   for (let i = thisYear; i>thisYear - 120 ; i--){
     numList.push(i);
@@ -26,6 +26,7 @@ class ClientInputForm extends React.Component {
       clientComplaint: '',
       companyName: '',
       complaintContent: '',
+      nickName: 'Bro',
     } ;
     this.handleInputChange=this.handleInputChange.bind(this);
     this.handleSubmit= this.handleSubmit.bind(this);
@@ -80,40 +81,39 @@ class ClientInputForm extends React.Component {
 
   render() {
     return(
-      <div className= "webPage">
-        <label>
-          <img src={logo} alt="Logo" />
-          <h1 > We Hear You, Bro. </h1>
-        </label>
-        <form className= "details">
-          <input
-            required
-            name= "clientName"
-            type="text"
-            value = {this.state.clientName}
-            placeholder = {'Your name*'}
-            onChange = {this.handleInputChange}
-          />
-
-          <input
-            name= "clientEmail"
-            type="text"
-            value = {this.state.clientEmail}
-            placeholder = {'Your email address'}
-            onChange = {this.handleInputChange}
-          />
-          <input
-            name= "clientPhone"
-            type="text"
-            value = {this.state.clientPhone}
-            placeholder = {'Your phone number'}
-            onChange = {this.handleInputChange}
-          />
-          <select
-              Name="clientYearOfBirth">
-              {generateYearList()}
-          </select>
-        </form>
+      <div>
+        <img src={logo} alt="Why logo" />
+        <h1>
+          We Hear You, Bro. </h1>
+        <form>
+          <div id="info">
+            <input
+              required
+              name= "clientName"
+              type="text"
+              value = {this.state.clientName}
+              placeholder = {'Your name*'}
+              onChange = {this.handleInputChange}
+            />
+            <input
+              name= "clientEmail"
+              type="text"
+              value = {this.state.clientEmail}
+              placeholder = {'Your email address'}
+              onChange = {this.handleInputChange}
+            />
+            <input
+              name= "clientPhone"
+              type="text"
+              value = {this.state.clientPhone}
+              placeholder = {'Your phone number'}
+              onChange = {this.handleInputChange}
+            />
+            <select
+                Name="clientYearOfBirth">
+                {generateYearList()}
+            </select>
+          </div>
             <textarea
               name= "companyName"
               required
@@ -122,7 +122,6 @@ class ClientInputForm extends React.Component {
               placeholder = {'Who pissed you off, dude? (Company Name OR any other identifier)'}
               onChange = {this.handleInputChange}
             />
-
             <textarea
               id="complaint"
               name= "clientComplaint"
@@ -130,7 +129,8 @@ class ClientInputForm extends React.Component {
               placeholder = {'Type your complaint in free text here'}
               onChange = {this.handleInputChange}
             />
-        <input type="submit" value="Submit complaint"/>
+            <input id="submit" type="submit" value="Submit complaint"/>
+        </form>
       </div>
     )
   }
