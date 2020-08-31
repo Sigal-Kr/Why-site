@@ -11,7 +11,7 @@ function generateYearList() {
   }
   const yearList = numList.map((number,index)=>
     <option key={index.toString()}> {number} </option> );
-  yearList.splice(0,0,<option key='pick'> Pick your birth year </option>);
+  yearList.splice(0,0,<option key='pick'> Pick your birth year </option>); //use unshift instead
   return yearList;
 }
 
@@ -86,7 +86,7 @@ class ClientInputForm extends React.Component {
         <img src={logo} alt="Why website logo" />
         <h1>
           We Hear You, Bro. </h1>
-        <form onSubmit={this.handleSubmit()} method="post"> {/*need to learn more about onSubmit structure*/}
+        <form onSubmit={this.handleSubmit} method="post"> {/*need to learn more about onSubmit structure*/}
           <div id="userInfoSection">
             <input
               required
@@ -111,8 +111,8 @@ class ClientInputForm extends React.Component {
               onChange = {this.handleInputChange}
             />
             <select
-                name="clientYearOfBirth">
-                {generateYearList()}
+              name="clientYearOfBirth">
+              {generateYearList()}
             </select>
           </div>
             <textarea
@@ -154,14 +154,10 @@ class App extends React.Component {
   render() {
     var bg= require('./Watercolor-Background-Image.jpg')
     return(
-      <html>
-        <head>
-          <title>Why Website</title>
-        </head>
-        <body>
-          <ClientInputForm/>
-        </body>
-      </html>
+      <div>
+        <ClientInputForm/>
+      </div>
+
     )
   }
 }

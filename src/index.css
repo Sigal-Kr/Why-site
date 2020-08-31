@@ -1,5 +1,9 @@
 *{
   font-family: Arial, Helvetica, sans-serif;
+  border-radius: 3.5px;
+  border-width: thin;
+/*  border-color: gray; //border shadow!*/
+  margin: 2px 0;
 }
 
 body{
@@ -26,11 +30,13 @@ h1{
 
 #userInfoSection{
   display: flex;
+  flex-flow: row;
+  justify-content: space-between;
 }
 
 textarea {
   display: flex;
-  width: 99%;
+  width: 99.07%;
   resize: none;
 }
 
