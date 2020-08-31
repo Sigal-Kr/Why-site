@@ -85,7 +85,7 @@ class ClientInputForm extends React.Component {
         <img src={logo} alt="Why logo" />
         <h1>
           We Hear You, Bro. </h1>
-        <form>
+        <form onSubmit="return validateForm()" method="post">
           <div id="info">
             <input
               required
