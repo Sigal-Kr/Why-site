@@ -4,7 +4,7 @@ import './index.css';
 import logo from './mylogo.png';
 
 function generateYearList() {
-  const thisYear = (new Date().getFullYear());
+  const thisYear = new Date().getFullYear();
   const numList = []
   for (let i = thisYear; i>thisYear - 120 ; i--){
     numList.push(i);
@@ -26,7 +26,7 @@ class ClientInputForm extends React.Component {
       clientComplaint: '',
       companyName: '',
       complaintContent: '',
-      nickName: 'Bro',
+//      userNickName: 'Bro', //for easter egg;
     } ;
     this.handleInputChange=this.handleInputChange.bind(this);
     this.handleSubmit= this.handleSubmit.bind(this);
@@ -75,6 +75,7 @@ class ClientInputForm extends React.Component {
     this.setState({[name]: event.target.value});
   }
 
+
   toJson() {
     return true; //to be continued...
   }
@@ -82,11 +83,11 @@ class ClientInputForm extends React.Component {
   render() {
     return(
       <div>
-        <img src={logo} alt="Why logo" />
+        <img src={logo} alt="Why website logo" />
         <h1>
           We Hear You, Bro. </h1>
-        <form onSubmit="return validateForm()" method="post">
-          <div id="info">
+        <form onSubmit={this.handleSubmit()} method="post"> {/*need to learn more about onSubmit structure*/}
+          <div id="userInfoSection">
             <input
               required
               name= "clientName"
@@ -110,7 +111,7 @@ class ClientInputForm extends React.Component {
               onChange = {this.handleInputChange}
             />
             <select
-                Name="clientYearOfBirth">
+                name="clientYearOfBirth">
                 {generateYearList()}
             </select>
           </div>
