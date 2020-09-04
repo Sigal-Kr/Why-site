@@ -16,6 +16,7 @@ body{
   display: flex;
   flex-flow: column;
   align-items: center;
+  margin: auto;
 }
 
 img{
@@ -49,3 +50,6 @@ textarea {
   width: 100%;
 }
 
+input {
+  box-shadow: none;
+}
