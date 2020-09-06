@@ -59,32 +59,32 @@ class ClientInputForm extends React.Component {
     this.handleSubmit= this.handleSubmit.bind(this);
   }
 
-  validateName(name){
-    return true;
-  } // check that there only letters inside the name, no funny figures
-
   validatePhone(phone){
-    return true;
-  } // check that the phone has a certain amount of digits, no funny figures or letters
+    let phoneRegex = /^\d{10}$/;
+    if(phone.match(phoneRegex)){
+      return true;
+      }
+    alert("phone invalid!");
+    return false;
+  }
 
   validateEmail(email){
-    return true;
-  } //check that the email has both user and domain.
+    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if (email.match(emailRegex)){
+      return true;
+    }
+    alert("email invalid~~~");
+    return false;
+  }
 
-  validateCompanyName(company){
+  validateCompanyName(company){ ///to be continued....
     return true;
   }
 
-  validateContent(complaintContent){
-    return true;
-  } //check that there is content inside the complaint submitted
-
   validateForm(){
-    if (this.validateName(this.state.clientName) &&
-      this.validatePhone(this.state.clientPhone) &&
+    if (this.validatePhone(this.state.clientPhone) &&
       this.validateEmail(this.state.clientEmail) &&
-      this.validateCompanyName(this.state.companyName) &&
-      this.validateContent(this.state.content)) {
+      this.validateCompanyName(this.state.companyName)) {
         return true;
     }
     return false;
@@ -104,7 +104,6 @@ class ClientInputForm extends React.Component {
     const name = event.target.name;
     this.setState({[name]: event.target.value});
   }
-
 
   toJson() {
     return true; //to be continued...
@@ -127,12 +126,14 @@ class ClientInputForm extends React.Component {
                 />
                 <input
                   name= "clientEmail"
+                  required
                   value = {this.state.clientEmail}
                   placeholder = {'Your email address'}
                   onChange = {this.handleInputChange}
                 />
                 <input
                   name= "clientPhone"
+                  required
                   value = {this.state.clientPhone}
                   placeholder = {'Your phone number'}
                   onChange = {this.handleInputChange}
@@ -152,6 +153,7 @@ class ClientInputForm extends React.Component {
               <textarea
                 id="complaint"
                 name= "clientComplaint"
+                required
                 value = {this.state.clientComplaint}
                 placeholder = {'Type your complaint in free text here'}
                 onChange = {this.handleInputChange}
