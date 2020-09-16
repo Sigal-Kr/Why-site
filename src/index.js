@@ -99,7 +99,17 @@ class HomePage extends React.Component {
 
   handleSubmit(){
     if (this.validateForm()) {
-      const jsonComplaint = this.toJson(this.state);
+      fetch('/submit',{
+        method: "POST",
+        cache: "no-cache",
+        headers:{
+          "content_type":"application/json",
+        },
+        body:JSON.stringify(this.state)
+        }
+      ).then(res => console.log(res))
+      // const jsonComplaint = this.toJson(this.state);
+      // console.log(jsonComplaint); //i do not understand tojson function
       this.setState({pageName: 'thankYou'}); //jumps back to 'inputForm right after alternating to 'thankYou' --bug
 /*
       return jsonComplaint;
