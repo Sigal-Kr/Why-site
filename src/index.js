@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import logo from './mylogo.png';
@@ -42,7 +42,7 @@ function statsPage(companyName) {
   )
 }
 
-class ClientInputForm extends React.Component {
+class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -52,11 +52,18 @@ class ClientInputForm extends React.Component {
       clientYearOfBirth: '',
       companyName: '',
       complaintContent: '',
-
+      time : 0,
       pageName: 'inputForm',
     } ;
     this.handleInputChange=this.handleInputChange.bind(this);
     this.handleSubmit= this.handleSubmit.bind(this);
+    this.getMyData=this.getMyData.bind(this);
+
+
+  }
+
+  getMyData(){
+    fetch('/time').then(res => res.json()).then(data => {this.setState({time: data.time})});
   }
 
   validatePhone(phone){
@@ -115,6 +122,7 @@ class ClientInputForm extends React.Component {
         return(
           <div>
             {headerRender("We Hear You, Bro.")}
+            <button onClick= {this.getMyData}>the time is: {this.state.time}</button>
             <form onSubmit={this.handleSubmit} > {/*need to learn more about onSubmit structure*/}
               <div id="userInfoSection" >
                 <input
@@ -162,7 +170,6 @@ class ClientInputForm extends React.Component {
             </form>
           </div>
         );
-        break;
       case 'thankYou':
         return(
           <div>
@@ -206,7 +213,6 @@ class ClientInputForm extends React.Component {
             </form>
           </div>
         );
-        break;
       case 'stats':
         return(
           <div>
@@ -214,7 +220,6 @@ class ClientInputForm extends React.Component {
               {statsPage(this.state.companyName)}
           </div>
         );
-        break;
       default:
         return ({headerRender})
     }
@@ -227,7 +232,6 @@ class App extends React.Component {
     super(props);
     this.state={
       logo: null,
-      clientInput: ClientInputForm,
       submitButton: null
     };
   }
@@ -236,10 +240,9 @@ class App extends React.Component {
   }
 
   render() {
-    var bg= require('./Watercolor-Background-Image.jpg')
     return(
       <div>
-        <ClientInputForm/>
+        <HomePage/>
       </div>
 
     )
