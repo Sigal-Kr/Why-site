@@ -1,5 +1,5 @@
 import time
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -9,13 +9,13 @@ def get_current_time():
 
 @app.route('/submit' ,methods = ['POST'])
 def submitComplaint():
-    print(request)
-    print(request.json)
-    return 'submitted! here is your ID'
+    newComplaint = request.json
+    # generate ID  
+    return jsonify(9)
 
-@app.route('/pull/<id>')
+@app.route('/pull/<id>', methods = ['GET'])
 def pullComplaint(id):
-    return {"clientName": 'sigalooshhhhh'}
+    return "clientId is %s"  % id
 
 @app.route('/companyStats/<companyName>')
 def statistics(companyName):

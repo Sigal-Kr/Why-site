@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import logo from './mylogo.png';
+import logo from './mylogo.png'; //need to change so the logo will be drawn from the server, not sure how.
 
 function generateYearList() {
   const thisYear = new Date().getFullYear();
@@ -15,11 +15,12 @@ function generateYearList() {
   return yearList;
 }
 
-function headerRender(titleText) {
+function headerRender(titleText, complaintId=null) {
   return (
     <div>
       <img src={logo} alt="Why website logo" />
       <h1>{titleText}</h1>
+      <h2>{complaintId}</h2>
     </div>
   )
 }
@@ -52,18 +53,12 @@ class HomePage extends React.Component {
       clientYearOfBirth: '',
       companyName: '',
       complaintContent: '',
-      time : 0,
+      complaintId: 0,
       pageName: 'inputForm',
     } ;
     this.handleInputChange=this.handleInputChange.bind(this);
     this.handleSubmit= this.handleSubmit.bind(this);
-    this.getMyData=this.getMyData.bind(this);
 
-
-  }
-
-  getMyData(){
-    fetch('/time').then(res => res.json()).then(data => {this.setState({time: data.time})});
   }
 
   validatePhone(phone){
@@ -71,16 +66,16 @@ class HomePage extends React.Component {
     if(phone.match(phoneRegex)){
       return true;
       }
-    alert("phone invalid!");
+    alert("*****Phone number invalid!*****");
     return false;
   }
 
   validateEmail(email){
-    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    let emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/ ;
     if (email.match(emailRegex)){
       return true;
     }
-    alert("email invalid~~~");
+    alert("~~ Invalid email!~~");
     return false;
   }
 
@@ -97,23 +92,30 @@ class HomePage extends React.Component {
     return false;
   }
 
-  handleSubmit(){
+  handleSubmit(event){
     if (this.validateForm()) {
       fetch('/submit',{
+          method: "POST",
+          cache: "no-cache", //maybe it needs to have cache?
+          headers:{"content_type":"application/json",}, //not sure what the header means.
+          body:JSON.stringify(this.state)
+          }
+        ).then(res => res.json()).then(newres => this.setState({complaintId : newres}))
+/*                                     ~~~~~~~~ask Dina about promises!~~~~~~~~
+      var fetchPromise = fetch('/submit',{
         method: "POST",
         cache: "no-cache",
-        headers:{
-          "content_type":"application/json",
-        },
+        headers:{"content_type":"application/json",},
         body:JSON.stringify(this.state)
         }
-      ).then(res => console.log(res))
-      // const jsonComplaint = this.toJson(this.state);
-      // console.log(jsonComplaint); //i do not understand tojson function
-      this.setState({pageName: 'thankYou'}); //jumps back to 'inputForm right after alternating to 'thankYou' --bug
-/*
-      return jsonComplaint;
-*/
+      )
+      var promiseJson = fetchPromise.then(res => {var resjson = res.json(); console.log("myresJson is:", resjson); return resjson});
+      console.log("promiseJson is:",promiseJson);
+      var myJson  = promiseJson.then(a => {console.log("a is: " ,a); return a;});
+      console.log("myJson is: " ,myJson); */
+
+      event.preventDefault(); 
+      this.setState({pageName: 'thankYou'}); 
     }
   }
 
@@ -122,18 +124,13 @@ class HomePage extends React.Component {
     this.setState({[name]: event.target.value});
   }
 
-  toJson() {
-    return true; //to be continued...
-  }
-
   render() {
     switch (this.state.pageName) {
       case 'inputForm':
         return(
           <div>
             {headerRender("We Hear You, Bro.")}
-            <button onClick= {this.getMyData}>the time is: {this.state.time}</button>
-            <form onSubmit={this.handleSubmit} > {/*need to learn more about onSubmit structure*/}
+            <form onSubmit={this.handleSubmit} >
               <div id="userInfoSection" >
                 <input
                   required
@@ -183,7 +180,7 @@ class HomePage extends React.Component {
       case 'thankYou':
         return(
           <div>
-            {headerRender("Thanks! we'll be in touch")}
+            {headerRender("Thanks! we'll be in touch. your complaint Id is:", this.state.complaintId)}
             <form>
               <div id="userInfoSection" >
                 <input
@@ -263,7 +260,3 @@ class App extends React.Component {
 // ========================================
 
 ReactDOM.render(<App />, document.getElementById("root"));
-
-
-
-
