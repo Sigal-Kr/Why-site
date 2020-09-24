@@ -171,7 +171,7 @@ class SummarizeForm extends React.Component {
       clientName: '',
       clientPhone: '',
       clientEmail: '',
-      clientYearOfBirth: '__',
+      clientYearOfBirth: '',
       companyName: '',
       complaintContent: '',        
       }
@@ -181,10 +181,10 @@ class SummarizeForm extends React.Component {
 
   pullComplaintData(){
     fetch('/pull',{
-      method: "GET",
+      method: "POST",
       cache: "no-cache", //maybe it needs to have cache?
       headers:{"content_type":"application/json",}, //not sure what the header means.
-      body:JSON.stringify()//this.props.complaintId)
+      body:JSON.stringify(this.props.complaintId)
       }
     ).then(res => res.json()).then(newres => this.setState(newres))
   }
