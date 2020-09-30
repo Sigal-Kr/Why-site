@@ -27,7 +27,8 @@ def create_why_db():
         print("Tables created")
     else:
         print("Error! cannot create the database connection.")
-    return conn
+    conn.close()
+    return True
 
 def open_connection(db):
     #create a database connection to a SQLite database
@@ -51,7 +52,7 @@ def create_table(conn, create_table_sql):
 
 def create_client(conn, client):
     email = client[0]
-    if (pull_client(conn, email)==False) :
+    if (pull_client(conn, email)==None) :
         sql = ''' INSERT INTO clients (email, name, phone, birth_year)
                 VALUES(?,?,?,?) '''
         cur = conn.cursor()
@@ -74,7 +75,7 @@ def create_complaint(conn, complaint):
     return False    
 
 def insert_data(conn, data):
-    print(data)
+    print("data recived by insert_data is:" , data)
     email = data['clientEmail']
     name = data['clientName']
     phone = data['clientPhone']
@@ -82,11 +83,13 @@ def insert_data(conn, data):
     company_name = data['companyName']
     content = data['complaintContent']
     client = (email, name, phone, birth_year)
+    print("insert data client sent to create_client is:  ", client)
     complaint = (email, company_name, content)
-    print(client)
-    print(complaint)
-    create_client(conn, client)
+    print("insert data complaint sent to create_complaint is:  " ,complaint)
+    a = create_client(conn, client)
+    print("create_client function returned:  ", a)
     cid = create_complaint(conn, complaint)
+    print('insert_data returned cid is:  ' , cid)
     return cid
     
 def print_table(conn, table_name):
@@ -112,19 +115,20 @@ def pull_client(conn, email):
     # pulls the client data by email
     try:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM clients") # WHERE email=?", (email,))
+        cur.execute("SELECT * FROM clients WHERE email=?", (email,))
         row = cur.fetchone()
+        print("pull_client fetched ", row, "when ", email, "as it's input")
         return row
     except Error as e:
         print(e)   
-    return False
 
 def pull_data(conn, complaint_id):
     complaint = pull_complaint(conn, complaint_id)
-    print("complaint is: " ,complaint)
+    print(" pull_data complaint is: " ,complaint)
     client_email = complaint[0]
-    print("[1:] is: ", complaint[1:])
+    print(" pull_data's complaint[1:] is: ", complaint[1:])
     client = pull_client(conn, client_email)
-    print("client is: ",client)
-    merged = {"complaint_id" : complaint_id}# , complaint[1:]#+ #client is nontype 
+    print(" pull_data recived pull_client as: ",client)
+    merged = {'clientName': client[1], 'clientPhone': client[2], 'clientEmail': client[0],
+      'clientYearOfBirth': client[3], 'companyName': complaint[1], 'complaintContent':complaint[2]}
     return merged

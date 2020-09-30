@@ -24,7 +24,7 @@ def get_complaint():
 
 if __name__ == "__main__":
     conn = ws.create_why_db()
-    conn.close()
+
     app.run(debug=True)
       
 
