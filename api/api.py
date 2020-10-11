@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import whysqlite as ws
+import govapi
 
 app = Flask(__name__)
 
@@ -18,13 +19,16 @@ def get_complaint():
         print("pulling", data)
         return jsonify(data)
 
-# @app.route('/company-stats/<companyName>')
-# def statistics(companyName):
-#     return jsonify({'companyName' : companyName ,'companyData': 'No data'})
+@app.route('/suggest', methods = ['GET'])
+def suggest():
+    return jsonify(govapi.gov_api())
+
+@app.route('/company-stats/<companyName>', methods = ['GET'])
+def statistics(companyName):
+    return jsonify({'companyName' : companyName ,'companyData': 'No data'})
 
 if __name__ == "__main__":
     conn = ws.create_why_db()
-
     app.run(debug=True)
       
 

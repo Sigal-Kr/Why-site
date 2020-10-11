@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import './index.css';
 import logo from './mylogo.png'; //need to change so the logo will be drawn from the server, not sure how.
 
@@ -18,6 +20,7 @@ class App extends React.Component {
     )
   }
 }
+
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -57,6 +60,7 @@ class InputForm extends React.Component {
       clientYearOfBirth: '',
       companyName: '',
       complaintContent: '',
+      govList: [],
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -109,6 +113,15 @@ class InputForm extends React.Component {
     }
   }
 
+  fetchGovList(){
+    fetch('/suggest',{
+      method: "GET",
+      cache: "no-cache", 
+      headers:{"content_type":"application/json",}, //not sure what the header means.
+      }
+      ).then(res => res.json()).then(newres => this.setState({govList : newres}))
+  }
+
   render() {
     return(
       <div>
@@ -142,13 +155,30 @@ class InputForm extends React.Component {
               {generateYearList()}
             </select>
           </div>
-          <textarea
+          <Autocomplete
+            freeSolo
+            id="autocomplete"
+            disableClearable
+            options={this.state.govList}
+            renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Company name"
+              margin="normal"
+              variant="outlined"
+              value = {this.state.companyName}
+              onChange = {this.handleInputChange}
+              InputProps={{ ...params.InputProps, type: 'search' }}
+            />
+            )}
+          />
+          {/*<textarea
             name= "companyName"
             required
             value = {this.state.companyName}
             placeholder = {'Who pissed you off, dude? (Company Name OR any other identifier)'}
             onChange = {this.handleInputChange}
-          />
+          />*/}
           <textarea
             id="complaint"
             name= "complaintContent"
@@ -159,6 +189,7 @@ class InputForm extends React.Component {
           />
           <input id="submit" type="submit" value="Submit complaint" />
         </form>
+        {this.fetchGovList()}
       </div>
     );
   }
@@ -225,11 +256,25 @@ class SummarizeForm extends React.Component {
                 <option>{this.state.clientYearOfBirth} </option>
             </select>
           </div>
-          <textarea
+          <Autocomplete
+            freeSolo
+            id="autocomplete"
+            disableClearable
+            options={this.state.govList}
+            renderInput={(params) => (
+            <TextField
+              {...params}
+              margin="normal"
+              variant="outlined"
+              value = {this.state.companyName}
+              disabled = {true}
+            />)}
+          />
+          {/*<textarea
             name= "companyName"
             value = {this.state.companyName}
             disabled = {true}
-          />
+          />*/}
           <textarea
             id="complaint"
             name= "complaintContent"
@@ -242,7 +287,6 @@ class SummarizeForm extends React.Component {
     )
   }
 }
-
 
 class StatsComponent extends React.Component { 
   constructor(props){
@@ -264,6 +308,7 @@ class StatsComponent extends React.Component {
     )
   }
 }
+
 
 // ========================================
 
