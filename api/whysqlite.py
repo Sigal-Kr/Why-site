@@ -79,11 +79,11 @@ def insert_data(conn, data):
     name = data['clientName']
     phone = data['clientPhone']
     birth_year = data['clientYearOfBirth']
-    company_name = data['companyName']
+    company_name = data['companyName'][0]
     content = data['complaintContent']
     client = (email, name, phone, birth_year)
     complaint = (email, company_name, content)
-    a = create_client(conn, client)
+    create_client(conn, client)
     cid = create_complaint(conn, complaint)
     return cid
     
@@ -110,6 +110,7 @@ def pull_client(conn, email):
     # pulls the client data by email
     try:
         cur = conn.cursor()
+        # select *.clients ,*.complaints from complaints as c,clients as u  where u.email=? and c.rowid=? and u.email=c.email
         cur.execute("SELECT * FROM clients WHERE email=?", (email,))
         row = cur.fetchone()
         return row
@@ -117,9 +118,16 @@ def pull_client(conn, email):
         print(e)   
 
 def pull_data(conn, complaint_id):
+    try:
+        cur = conn.cursor()
+        cur.execute("select *.clients ,*.complaints from complaints as c,clients as u  where u.email=c.email and c.rowid=? ", (complaint_id,))
+        row = cur.fetchone()
+        print(row)
+    except Error as e:
+        print(e)  
     complaint = pull_complaint(conn, complaint_id)
     client_email = complaint[0]
     client = pull_client(conn, client_email)
     merged = {'clientName': client[1], 'clientPhone': client[2], 'clientEmail': client[0],
-      'clientYearOfBirth': client[3], 'companyName': complaint[1], 'complaintContent':complaint[2]}
+      'clientYearOfBirth': client[3], 'companyName': [complaint[1]], 'complaintContent':complaint[2]}
     return merged
