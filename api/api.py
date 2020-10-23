@@ -19,6 +19,7 @@ def get_complaint():
         data = ws.pull_data(conn, requested_id)
         print("pulling", data)
         return jsonify(data)
+        
 @app.route('/suggest', methods = ['GET'])
 def suggest():
     return jsonify(govapi.gov_api())

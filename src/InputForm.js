@@ -18,13 +18,18 @@ class InputForm extends React.Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.assignByType = this.assignByType.bind(this);
+      this.typeahead = null;
+    }
+
+    handleChange(e) {
+      this.typeahead.getInstance().clear();
     }
 
     assignByType(companyName){
       if (typeof companyName[0] == "string"){ 
         this.setState({companyName});
       }
-      else {      
+      else if (companyName[0]!==undefined && companyName[0]['label'] !== undefined) {      
         this.setState({companyName: [companyName[0]['label']]});
       }
     }
@@ -97,7 +102,7 @@ class InputForm extends React.Component {
                 required
                 name= "clientName"
                 value = {this.state.clientName}
-                placeholder = {'Name*'}
+                placeholder = {'Name'}
                 onChange = {this.handleInputChange}
               />
               <input
@@ -121,11 +126,12 @@ class InputForm extends React.Component {
               </select>
             </div>
             <Typeahead      
-              allowNew          
+              allowNew  
+              ref={(ref) => this.typeahead = ref}        
               id= "companyName"
               onChange={selected => this.assignByType(selected)}
               options={this.state.govList}
-              placeholder={"Who pissed you off, dude? (Company Name OR any other identifier)"}
+              placeholder={"Company name / identifier"}
               selected={this.state.companyName}
             />
             <textarea

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import logo from './mylogo.png'; //need to change so the logo will be drawn from the server, not sure how.
 import './index.css';
 import InputForm from "./InputForm";
 import SummarizeForm from "./SummarizeForm";
@@ -14,6 +13,7 @@ class App extends React.Component {
       complaintId: '',
       pageName: 'formPage',
     } ;
+
     this.updateId = this.updateId.bind(this);
   }
 
@@ -24,7 +24,9 @@ class App extends React.Component {
   render() {
     switch (this.state.pageName) {
       case 'formPage':
-        return( <InputForm submitted={this.updateId}/>)
+        return(<div id="form"> 
+                <InputForm submitted={this.updateId}/>
+               </div>)
       case 'summarizePage':
         return( <SummarizeForm complaintId= {this.state.complaintId}/> );
       case 'statsPage':

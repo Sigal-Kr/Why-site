@@ -110,7 +110,6 @@ def pull_client(conn, email):
     # pulls the client data by email
     try:
         cur = conn.cursor()
-        # select *.clients ,*.complaints from complaints as c,clients as u  where u.email=? and c.rowid=? and u.email=c.email
         cur.execute("SELECT * FROM clients WHERE email=?", (email,))
         row = cur.fetchone()
         return row
@@ -118,13 +117,6 @@ def pull_client(conn, email):
         print(e)   
 
 def pull_data(conn, complaint_id):
-    try:
-        cur = conn.cursor()
-        cur.execute("select *.clients ,*.complaints from complaints as c,clients as u  where u.email=c.email and c.rowid=? ", (complaint_id,))
-        row = cur.fetchone()
-        print(row)
-    except Error as e:
-        print(e)  
     complaint = pull_complaint(conn, complaint_id)
     client_email = complaint[0]
     client = pull_client(conn, client_email)
